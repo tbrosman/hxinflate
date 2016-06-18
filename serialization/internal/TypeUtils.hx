@@ -135,7 +135,20 @@ class TypeUtils
     }
 
     // Get the instance fields and filter out the stuff we don't serialize
+    #if flash
+    // Avoid serializaing built-in properties (e.g. Point.length)
+    var rawFields:Array<String> = new Array<String>();
+    var xml:flash.xml.XML = untyped __global__["flash.utils.describeType"](cls);
+    var vars = xml.factory[0].child("variable");
+    
+    for(i in 0...vars.length()) {
+        var field = vars[i].attribute("name").toString();
+        rawFields.push(field);
+    }
+    #else
     var rawFields = Type.getInstanceFields(cls);
+    #end // flash
+    
     var filteredFields = [];
     for (fname in rawFields) {
       // Don't serialize any field that has a getter
