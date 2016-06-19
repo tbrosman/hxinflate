@@ -423,7 +423,7 @@ class Deflater {
     }
     if( useCache && serializeRef(v) )
       return;
-    cache.pop();
+    
     switch( #if (neko || cs) Type.getClassName(c) #else c #end ) {
     case #if (neko || cs) "Array" #else cast Array #end:
       serializeArray(v);
@@ -997,8 +997,6 @@ class Deflater {
     if ( options.stats != null ) {
       startPos = buf.toString().length;
     }
-
-    cache.push(v);
 
     if (callPre(v)) {
       v.preSerialize(this);
